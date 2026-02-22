@@ -33,9 +33,7 @@ const Dashboard = () => {
         return;
       }
 
-      const resp = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-matches`,
-        {
+      const resp = await fetch("/api/generate-matches", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -43,8 +41,7 @@ const Dashboard = () => {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify({}),
-        }
-      );
+        });
 
       if (!resp.ok) {
         const err = await resp.json();
