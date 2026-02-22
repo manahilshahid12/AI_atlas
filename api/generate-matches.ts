@@ -15,7 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Set CORS headers on every response
   res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "authorization, x-client-info, apikey, content-type"
@@ -27,7 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).end();
   }
 
-  if (req.method !== "POST") {
+  if (req.method !== "POST" && req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
@@ -43,7 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ? { apikey: req.headers["apikey"] as string }
           : {}),
       },
-      body: JSON.stringify(req.body ?? {}),
+      body: JSON.stringify(req.method === "GET" ? {} : (req.body ?? {})),
     });
 
     const data = await upstreamRes.json();
